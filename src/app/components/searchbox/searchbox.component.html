@@ -1,0 +1,15 @@
+<div class="container">
+
+	<div class="input-group">
+		<input type="text" class="form-control" id="searchInput" placeholder="Search" (keyup)='searching($event)' [(ngModel)]="search" tabindex="1" autofocus>
+		
+    <div class="suggestions" *ngIf="autoCompleteOptionsFiltered">
+			<ul *ngFor="let option of autoCompleteOptionsFiltered; let i = index" tabindex="2">
+				<li *ngIf="i < 3">
+					<a (click)="autoCompleteItemSelected(option)">{{ option }}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+</div>
