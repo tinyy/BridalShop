@@ -40,6 +40,7 @@ export class SearchboxComponent implements OnInit {
 
     // Initiate autocomplete 
     this.findInAutoCompleteOptions(this.search);
+    console.log(this.search);
 
   }
 
@@ -60,7 +61,7 @@ export class SearchboxComponent implements OnInit {
   checkArrowKey(e: KeyboardEvent) {
     if (e.keyCode === 40) {
       if (this.autoCompleteOptionsFiltered != undefined) {
-        
+     
         
 
         // let firstOption = document.getElementById("firstAutoCompleteOption");
