@@ -12,11 +12,8 @@ export class SearchboxComponent implements OnInit {
 
 
   autoCompleteOptions: string[] = Countries;
-  autoCompleteOptionsFiltered: string[];
+  filteredOptions: string[];
   search: string = '';
-
-  @ViewChild('autoComplete') vc;
-
 
   constructor() { }
 
@@ -24,45 +21,40 @@ export class SearchboxComponent implements OnInit {
   }
 
   // Search initiated with keybboard event
-  searching(event: KeyboardEvent) {
-    this.search = (<HTMLInputElement>event.target).value;
-
+  searching() {
     this.findInAutoCompleteOptions(this.search);
-
-    // TODO: Debugging only - remove.
-    console.log(this.search);
-    if (this.autoCompleteOptionsFiltered) {
-      console.log(this.autoCompleteOptionsFiltered.length + ' - available autocomplete options');
-    }
-  }
-
-  // Check key pressed is down by keycode = 40
-  checkArrowKey(e: KeyboardEvent) {
-    if (e.keyCode === 40) {
-      // User has pressed down - focus on the autocomplete list
-      if (this.autoCompleteOptionsFiltered != undefined) {
-        document.getElementById('autoCompleteOptions').focus();
-        this.vc.nativeElement.focus();
-      }
-    }
   }
 
   // Filter auto complete options list 
   findInAutoCompleteOptions(val: string) {
+
+    this.filteredOptions = null; // Always clear filtered list
+
     // Clear autocomplete options on empty search
     if (!val) {
-      this.autoCompleteOptionsFiltered = null;
       return;
     }
 
     // Filter autocomplete options
-    this.autoCompleteOptionsFiltered =
+    this.filteredOptions =
       this.autoCompleteOptions.filter(option => option.toLowerCase().substr(0, val.length) === val.toLowerCase());
   }
 
-  // Auto Complete option has been selected
-  autoCompleteItemSelected(option: string) {
-    this.search = option;
-    this.autoCompleteOptionsFiltered = null;
+  onchange() {
+    if (this.filteredOptions && this.search === this.filteredOptions[0]) {
+      console.log('Single result');
+    }
   }
+
+
+  select(val: string) {
+    console.log(val);
+    this.search = val;
+  }
+
+  // // Auto Complete option has been selected
+  // autoCompleteItemSelected(option: string) {
+  //   this.search = option;
+  //   this.autoCompleteOptionsFiltered = null;
+  // }
 }

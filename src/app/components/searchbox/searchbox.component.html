@@ -1,15 +1,8 @@
 <div class="container">
-
-	<div class="input-group">
-		<input type="text" class="form-control" id="searchInput" placeholder="Search" (keyup)='searching($event)' [(ngModel)]="search" (keydown)='checkArrowKey($event)' tabindex="1" autofocus list="autoCompleteOptions">
-		
-    <div class="suggestions" *ngIf="autoCompleteOptionsFiltered">
-			<datalist *ngFor="let option of autoCompleteOptionsFiltered; let i = index" tabindex="2" id="autoCompleteOptions">
-				<option>
-					<a (click)="autoCompleteItemSelected(option)">{{ option }}</a>
-				</option>
-			</datalist>
-		</div>
-	</div>
-
+	<input type="text" class="form-control search" (keyup)='searching()' [(ngModel)]="search" list="autocompleteOptions" (ngModelChange)='onchange()'>
+	<datalist id="autocompleteOptions">
+		<option *ngFor='let option of filteredOptions'>
+			{{ option}}
+		</option>
+	</datalist>
 </div>

@@ -12,3 +12,15 @@ ul {
    }
 }
 }
+
+.search {
+    background: #fff;
+    padding: .5em;
+    border: none;
+    border-bottom: 1px solid #666;
+
+    &:active, &:focus {
+        border-bottom: 2px solid #888;
+    }
+
+}

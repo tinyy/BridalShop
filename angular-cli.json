@@ -16,7 +16,8 @@
       "mobile": false,
       "styles": [
         "../node_modules/animate.css/animate.min.css",
-        "../node_modules/bootstrap/dist/css/bootstrap.css"
+        "../node_modules/bootstrap/dist/css/bootstrap.css",
+        "../src/app/sass/global.scss"
       ],
       "scripts": [],
       "environments": {
