@@ -1,50 +1,46 @@
 import { Component, OnInit } from '@angular/core';
-import { ViewChild } from '@angular/core';
+import { ElementRef, Renderer } from '@angular/core';
 
 import { Countries } from '../../models/countries'; // Auto complete options.
 
 @Component({
   selector: 'app-searchbox',
   templateUrl: './searchbox.component.html',
-  styleUrls: ['./searchbox.component.scss']
+  styleUrls: ['./searchbox.component.scss'],
+  providers: [],
+  host: {
+    '(document:click)': 'hideAutoComplete($event)',
+  },
 })
-export class SearchboxComponent implements OnInit {
 
+export class SearchboxComponent implements OnInit {
 
   autoCompleteOptions: string[] = Countries;
   autoCompleteOptionsFiltered: string[];
   search: string = '';
 
-  @ViewChild('autoComplete') vc;
+  constructor(private _elementRef: ElementRef, private _renderer: Renderer) { }
 
-
-  constructor() { }
+  // Detect click outside the search component
+  hideAutoComplete(event) {
+    if (!this._elementRef.nativeElement.contains(event.target)) {
+      this.autoCompleteOptionsFiltered = null; // Clear options to hide them
+      console.info('Autocomplete options have been hidden'); // TODO: Remove 
+    }
+    else
+      this.findInAutoCompleteOptions(this.search);
+  }
 
   ngOnInit() {
   }
 
-  // Search initiated with keybboard event
+  // Search initiated with keyboard event
   searching(event: KeyboardEvent) {
     this.search = (<HTMLInputElement>event.target).value;
 
+    // Initiate autocomplete 
     this.findInAutoCompleteOptions(this.search);
 
-    // TODO: Debugging only - remove.
-    console.log(this.search);
-    if (this.autoCompleteOptionsFiltered) {
-      console.log(this.autoCompleteOptionsFiltered.length + ' - available autocomplete options');
-    }
-  }
-
-  // Check key pressed is down by keycode = 40
-  checkArrowKey(e: KeyboardEvent) {
-    if (e.keyCode === 40) {
-      // User has pressed down - focus on the autocomplete list
-      if (this.autoCompleteOptionsFiltered != undefined) {
-        document.getElementById('autoCompleteOptions').focus();
-        this.vc.nativeElement.focus();
-      }
-    }
   }
 
   // Filter auto complete options list 
@@ -59,6 +55,23 @@ export class SearchboxComponent implements OnInit {
     this.autoCompleteOptionsFiltered =
       this.autoCompleteOptions.filter(option => option.toLowerCase().substr(0, val.length) === val.toLowerCase());
   }
+
+  // Check key pressed is down by keycode = 40
+  checkArrowKey(e: KeyboardEvent) {
+    if (e.keyCode === 40) {
+      if (this.autoCompleteOptionsFiltered != undefined) {
+        
+        
+
+        // let firstOption = document.getElementById("firstAutoCompleteOption");
+        // firstOption.focus();
+        // document.getElementById('autoCompleteOptions').focus();
+        // this.vc.nativeElement.focus();
+      }
+    }
+  }
+
+
 
   // Auto Complete option has been selected
   autoCompleteItemSelected(option: string) {

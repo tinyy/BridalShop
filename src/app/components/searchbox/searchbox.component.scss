@@ -4,11 +4,28 @@ ul {
    padding: 0;
    margin: 0;
    list-style: none;
+   padding-top: 5px;
 
    li {
-       &:active, &:hover {
-           background: red;
+       a {
+           display: block;
+           padding: 5px;
+
+            &:active, &:hover {
+                background: #808080;
+                color: #fff;
+                cursor: pointer;
+                text-decoration: none;
+            }
        }
    }
 }
+}
+
+/* Search - Autocomplete */
+.search {
+    padding: 10px 20px 5px 10px;
+    border: none;
+    border-bottom: 2px solid #6bd36d;
+    border-radius: 0;
 }
