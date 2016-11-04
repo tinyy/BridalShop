@@ -1,7 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ElementRef, Renderer } from '@angular/core';
+import { Directive, Input, ViewChild } from '@angular/core';
 
 import { Countries } from '../../models/countries'; // Auto complete options.
+
+@Directive({
+  selector: '[number]'
+})
+export class NumberDirective {
+  @Input() number;
+
+  isEven() {
+    return this.number % 2 === 0;
+  }
+}
 
 @Component({
   selector: 'app-searchbox',
@@ -19,6 +31,10 @@ export class SearchboxComponent implements OnInit {
   autoCompleteOptionsFiltered: string[];
   search: string = '';
 
+  tabIndex: number = 0;
+  autoSearch: string;
+  activeOption: number;
+
   constructor(private _elementRef: ElementRef, private _renderer: Renderer) { }
 
   // Detect click outside the search component
@@ -27,8 +43,8 @@ export class SearchboxComponent implements OnInit {
       this.autoCompleteOptionsFiltered = null; // Clear options to hide them
       console.info('Autocomplete options have been hidden'); // TODO: Remove 
     }
-    else
-      this.findInAutoCompleteOptions(this.search);
+    // else
+    //   this.findInAutoCompleteOptions(this.search);
   }
 
   ngOnInit() {
@@ -40,8 +56,6 @@ export class SearchboxComponent implements OnInit {
 
     // Initiate autocomplete 
     this.findInAutoCompleteOptions(this.search);
-    console.log(this.search);
-
   }
 
   // Filter auto complete options list 
@@ -57,18 +71,34 @@ export class SearchboxComponent implements OnInit {
       this.autoCompleteOptions.filter(option => option.toLowerCase().substr(0, val.length) === val.toLowerCase());
   }
 
+  checkTabIndex(): void {
+    // if (this.tabIndex < 0) {
+    //   this.tabIndex = 0;
+    //   this.autoSearch = this.autoCompleteOptionsFiltered[this.tabIndex];
+    // }
+
+    this.activeOption = this.tabIndex;
+
+    console.log(this.autoCompleteOptionsFiltered[this.tabIndex]);
+
+    if (this.tabIndex === 4)
+      this.tabIndex = 0;
+    else
+      this.tabIndex++;
+
+  }
+
   // Check key pressed is down by keycode = 40
   checkArrowKey(e: KeyboardEvent) {
+    console.log(e.keyCode);
     if (e.keyCode === 40) {
       if (this.autoCompleteOptionsFiltered != undefined) {
-     
-        
+        // let target = e.srcElement.id; // Get element of event source element id
+        this.checkTabIndex();
 
-        // let firstOption = document.getElementById("firstAutoCompleteOption");
-        // firstOption.focus();
-        // document.getElementById('autoCompleteOptions').focus();
-        // this.vc.nativeElement.focus();
       }
+
+      // up 38
     }
   }
 

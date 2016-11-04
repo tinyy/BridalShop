@@ -5,8 +5,10 @@ ul {
    margin: 0;
    list-style: none;
    padding-top: 5px;
+   z-index: 9999; /* Bring it to the front of all other content */
 
    li {
+       padding: 5px;
        a {
            display: block;
            padding: 5px;
@@ -17,9 +19,17 @@ ul {
                 cursor: pointer;
                 text-decoration: none;
             }
+
+            &:focus { background: red !important; }
        }
    }
 }
+.active {
+                background: #808080;
+                color: #fff;
+                cursor: pointer;
+                text-decoration: none;
+            }
 }
 
 /* Search - Autocomplete */

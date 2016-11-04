@@ -4,10 +4,7 @@
 		(keydown)='checkArrowKey($event)' tabindex="1">
 	<div class="suggestions" *ngIf="autoCompleteOptionsFiltered">
 		<ul *ngFor="let option of autoCompleteOptionsFiltered; let i = index" tabindex="2">
-			<li *ngIf="i === 1">
-				<a (click)="autoCompleteItemSelected(option)" id='firstAutoCompleteOption'><strong>{{ option }}</strong></a>
-			</li>
-			<li *ngIf="i < 5 && i > 1">
+			<li *ngIf="i < 5"  [ngClass]="{ active: activeOption === i }">Active option {{ activeOption }} - Array Index {{ i }}
 				<a (click)="autoCompleteItemSelected(option)">{{ option }}</a>
 			</li>
 		</ul>
