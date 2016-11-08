@@ -1,11 +1,11 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
-import { CloseAutoCompleteDirective } from './close-auto-complete.directive';
+import { ClickoutsideDirective } from './click-outside.directive';
 
-describe('Directive: CloseAutoComplete', () => {
+describe('Directive: Clickoutside', () => {
   it('should create an instance', () => {
-    let directive = new CloseAutoCompleteDirective();
+    let directive = new ClickoutsideDirective();
     expect(directive).toBeTruthy();
   });
 });

@@ -1,112 +1,92 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ElementRef, Renderer } from '@angular/core';
-import { Directive, Input, ViewChild } from '@angular/core';
 
 import { Countries } from '../../models/countries'; // Auto complete options.
+import { KeyboardKeys } from '../../models/enums/keyboard-keys';
 
-@Directive({
-  selector: '[number]'
-})
-export class NumberDirective {
-  @Input() number;
-
-  isEven() {
-    return this.number % 2 === 0;
-  }
-}
+import { KeyMapper } from '../../components/helpers/key-mapper';
 
 @Component({
   selector: 'app-searchbox',
   templateUrl: './searchbox.component.html',
   styleUrls: ['./searchbox.component.scss'],
   providers: [],
-  host: {
-    '(document:click)': 'hideAutoComplete($event)',
-  },
 })
 
 export class SearchboxComponent implements OnInit {
 
-  autoCompleteOptions: string[] = Countries;
-  autoCompleteOptionsFiltered: string[];
+  options: string[] = Countries;
+  optionsFiltered: string[];
   search: string = '';
 
-  tabIndex: number = 0;
-  autoSearch: string;
-  activeOption: number;
+  optionsLimit: number = 5; // Set limit to autocomplete options displayed
+  optionIndex: number = 0; // changes active item in autocomplete options
+  originInput: boolean = true; // determines if activeOptionIndex remains at zero
+  selected: boolean; // hides autocomplete when option has been selected
+
 
   constructor(private _elementRef: ElementRef, private _renderer: Renderer) { }
-
-  // Detect click outside the search component
-  hideAutoComplete(event) {
-    if (!this._elementRef.nativeElement.contains(event.target)) {
-      this.autoCompleteOptionsFiltered = null; // Clear options to hide them
-      console.info('Autocomplete options have been hidden'); // TODO: Remove 
-    }
-    // else
-    //   this.findInAutoCompleteOptions(this.search);
-  }
 
   ngOnInit() {
   }
 
-  // Search initiated with keyboard event
-  searching(event: KeyboardEvent) {
-    this.search = (<HTMLInputElement>event.target).value;
+  // Search initiated with keyboard event - Filter auto complete options list  keyup
+  findInAutoCompleteOptions(event: KeyboardEvent) {
+    this.search = (<HTMLInputElement>event.target).value; // return inputSearch value
 
-    // Initiate autocomplete 
-    this.findInAutoCompleteOptions(this.search);
-  }
+    this.optionsFiltered = null;
 
-  // Filter auto complete options list 
-  findInAutoCompleteOptions(val: string) {
     // Clear autocomplete options on empty search
-    if (!val) {
-      this.autoCompleteOptionsFiltered = null;
+    if (!this.search) {      
+      this.optionIndex = 0;
+      return;
+    }
+    // Don't recreate filtered options if option has just been selected.
+    if (this.selected) {
+      this.selected = false;
       return;
     }
 
     // Filter autocomplete options
-    this.autoCompleteOptionsFiltered =
-      this.autoCompleteOptions.filter(option => option.toLowerCase().substr(0, val.length) === val.toLowerCase());
+    this.optionsFiltered =
+      this.options.filter(option => option.toLowerCase().substr(0, this.search.length) === this.search.toLowerCase());
   }
 
-  checkTabIndex(): void {
-    // if (this.tabIndex < 0) {
-    //   this.tabIndex = 0;
-    //   this.autoSearch = this.autoCompleteOptionsFiltered[this.tabIndex];
-    // }
+  // 
+  changeActiveOptionIndex(e: KeyboardEvent): void {
+    // Call helper class to map keyboard key
+    let direction = KeyMapper.MapKeyBoardKey(e);
+    if (direction === KeyboardKeys.KeyNotMapped) { return; } // Return if key is not mapped
 
-    this.activeOption = this.tabIndex;
+    // keep a copy of the autocomplete option by index before amending the activeOptionIndex
+    let autoSearch = this.optionsFiltered[this.optionIndex];
 
-    console.log(this.autoCompleteOptionsFiltered[this.tabIndex]);
-
-    if (this.tabIndex === 4)
-      this.tabIndex = 0;
-    else
-      this.tabIndex++;
-
-  }
-
-  // Check key pressed is down by keycode = 40
-  checkArrowKey(e: KeyboardEvent) {
-    console.log(e.keyCode);
-    if (e.keyCode === 40) {
-      if (this.autoCompleteOptionsFiltered != undefined) {
-        // let target = e.srcElement.id; // Get element of event source element id
-        this.checkTabIndex();
-
+    // increment depnending on direction
+    if (direction === KeyboardKeys.Down) {
+      // dont increment if directly from input
+      if (this.originInput) {
+        this.originInput = false;
+        return;
       }
-
-      // up 38
+      // check index and loop to beginning of list if needed.
+      if (this.optionIndex === (this.optionsLimit -1) || this.optionIndex === (this.optionsFiltered.length - 1)) {
+        this.optionIndex = 0;
+        return;
+      }
+      this.optionIndex++; // increment to nav down
+    } else if (direction === KeyboardKeys.Up) {
+      this.optionIndex--;
+    } else if (direction === KeyboardKeys.Enter) {
+      this.optionSelected(autoSearch);
     }
   }
 
-
-
   // Auto Complete option has been selected
-  autoCompleteItemSelected(option: string) {
+  optionSelected(option: string) {
     this.search = option;
-    this.autoCompleteOptionsFiltered = null;
+    this.optionsFiltered = null;
+    this.originInput = true;
+    this.selected = true; 
   }
+
 }

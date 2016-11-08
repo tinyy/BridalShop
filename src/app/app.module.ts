@@ -11,7 +11,7 @@ import { SearchboxComponent } from './components/searchbox/searchbox.component';
   declarations: [
     AppComponent,
     TopNavComponent,
-    SearchboxComponent
+    SearchboxComponent,
   ],
   imports: [
     BrowserModule,
