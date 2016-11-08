@@ -1,9 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ElementRef, Renderer } from '@angular/core';
 
-import { Countries } from '../../models/countries'; // Auto complete options.
 import { KeyboardKeys } from '../../models/enums/keyboard-keys';
-
 import { KeyMapper } from '../../components/helpers/key-mapper';
 
 @Component({
@@ -15,17 +12,17 @@ import { KeyMapper } from '../../components/helpers/key-mapper';
 
 export class SearchboxComponent implements OnInit {
 
-  options: string[] = Countries;
+  @Input('options') options: string[];
   optionsFiltered: string[];
   search: string = '';
 
-  optionsLimit: number = 5; // Set limit to autocomplete options displayed
+  @Input('optionsLimit') optionsLimit: number; // Set limit to autocomplete options displayed
   optionIndex: number = 0; // changes active item in autocomplete options
   originInput: boolean = true; // determines if activeOptionIndex remains at zero
   selected: boolean; // hides autocomplete when option has been selected
 
 
-  constructor(private _elementRef: ElementRef, private _renderer: Renderer) { }
+  constructor() { }
 
   ngOnInit() {
   }
