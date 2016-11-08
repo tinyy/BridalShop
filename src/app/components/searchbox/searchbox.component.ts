@@ -17,20 +17,20 @@ export class SearchboxComponent implements OnInit {
 
   @Input('options') options: string[];
   optionsFiltered: string[];
-  search: string = '';
+  
 
   @Input('optionsLimit') optionsLimit: number; // Set limit to autocomplete options displayed
   optionIndex: number = 0; // changes active item in autocomplete options
   originInput: boolean = true; // determines if activeOptionIndex remains at zero
-  selected: boolean; // hides autocomplete when option has been selected
 
   searchForm: FormGroup;
+  searchInput: FormControl = new FormControl();
 
   constructor(private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.searchForm = this._formBuilder.group({
-      searchInput: ''
+      searchInput: this.searchInput
     });
 
     this.searchForm.valueChanges.subscribe(value => {
@@ -43,19 +43,14 @@ export class SearchboxComponent implements OnInit {
     this.optionsFiltered = null;
 
     // Clear autocomplete options on empty search
-    if (!this.search) {
+    if (!this.searchInput.value) {
       this.optionIndex = 0;
-      return;
-    }
-    // Don't recreate filtered options if option has just been selected.
-    if (this.selected) {
-      this.selected = false;
       return;
     }
 
     // Filter autocomplete options
     this.optionsFiltered =
-      this.options.filter(option => option.toLowerCase().substr(0, this.search.length) === this.search.toLowerCase());
+      this.options.filter(option => option.toLowerCase().substr(0, this.searchForm.get('searchInput').value.length) === this.searchForm.get('searchInput').value.toLowerCase());
   }
 
   // Search initiated with keyboard event - Filter auto complete options list 
@@ -87,8 +82,12 @@ export class SearchboxComponent implements OnInit {
         return;
       }
       this.optionIndex++; // increment to nav down
+
     } else if (direction === KeyboardKeys.Up) {
-      this.optionIndex--;
+      event.preventDefault();
+     if (this.optionIndex != -1) {       
+       this.optionIndex--;
+     } 
     } else if (direction === KeyboardKeys.Enter) {
       this.optionSelected(autoSearch);
     }
@@ -96,10 +95,16 @@ export class SearchboxComponent implements OnInit {
 
   // Auto Complete option has been selected
   optionSelected(option: string) {
-    this.search = option;
+    this.searchForm.setValue({searchInput: option}); // set control value
     this.optionsFiltered = null;
     this.originInput = true;
-    this.selected = true;
+  }
+
+  // Search form submitted
+  searchSelected() {
+    console.log(this.searchForm.get('searchInput').value);
+    
+    return;
   }
 
 }
