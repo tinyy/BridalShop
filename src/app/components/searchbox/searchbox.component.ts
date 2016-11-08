@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
+
+import { HostListener } from '@angular/core';
 import { KeyboardKeys } from '../../models/enums/keyboard-keys';
 import { KeyMapper } from '../../components/helpers/key-mapper';
 
@@ -21,20 +24,26 @@ export class SearchboxComponent implements OnInit {
   originInput: boolean = true; // determines if activeOptionIndex remains at zero
   selected: boolean; // hides autocomplete when option has been selected
 
+  searchForm: FormGroup;
 
-  constructor() { }
+  constructor(private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.searchForm = this._formBuilder.group({
+      searchInput: ''
+    });
+
+    this.searchForm.valueChanges.subscribe(value => {
+      this.searchInitiated();
+    });
   }
 
-  // Search initiated with keyboard event - Filter auto complete options list  keyup
-  findInAutoCompleteOptions(event: KeyboardEvent) {
-    this.search = (<HTMLInputElement>event.target).value; // return inputSearch value
-
+  searchInitiated() {
+    // Always clear the list!
     this.optionsFiltered = null;
 
     // Clear autocomplete options on empty search
-    if (!this.search) {      
+    if (!this.search) {
       this.optionIndex = 0;
       return;
     }
@@ -49,24 +58,31 @@ export class SearchboxComponent implements OnInit {
       this.options.filter(option => option.toLowerCase().substr(0, this.search.length) === this.search.toLowerCase());
   }
 
-  // 
-  changeActiveOptionIndex(e: KeyboardEvent): void {
+  // Search initiated with keyboard event - Filter auto complete options list 
+  @HostListener('window:keydown', ['$event'])
+  findInAutoCompleteOptions(event: KeyboardEvent) {
     // Call helper class to map keyboard key
-    let direction = KeyMapper.MapKeyBoardKey(e);
-    if (direction === KeyboardKeys.KeyNotMapped) { return; } // Return if key is not mapped
+    let direction = KeyMapper.MapKeyBoardKey(event);
+    if (direction === KeyboardKeys.KeyNotMapped) { this.optionIndex = 0; return; } // Return if key is not mapped
+
+    // Return if empty
+    if (!this.optionsFiltered) {
+      return;
+    }
 
     // keep a copy of the autocomplete option by index before amending the activeOptionIndex
     let autoSearch = this.optionsFiltered[this.optionIndex];
 
     // increment depnending on direction
     if (direction === KeyboardKeys.Down) {
+
       // dont increment if directly from input
       if (this.originInput) {
         this.originInput = false;
         return;
       }
       // check index and loop to beginning of list if needed.
-      if (this.optionIndex === (this.optionsLimit -1) || this.optionIndex === (this.optionsFiltered.length - 1)) {
+      if (this.optionIndex === (this.optionsLimit - 1) || this.optionIndex === (this.optionsFiltered.length - 1)) {
         this.optionIndex = 0;
         return;
       }
@@ -83,7 +99,7 @@ export class SearchboxComponent implements OnInit {
     this.search = option;
     this.optionsFiltered = null;
     this.originInput = true;
-    this.selected = true; 
+    this.selected = true;
   }
 
 }

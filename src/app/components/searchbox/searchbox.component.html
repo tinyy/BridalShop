@@ -1,20 +1,19 @@
 <div class="container">
 	<div class="search-container">
-<div class="search-border-left"></div>
-<div class="search-border-right"></div>
-	<input type="text" class="form-control search" id="searchInput" placeholder="Search" [(ngModel)]="search" (keyup)='findInAutoCompleteOptions($event)'
-		(keydown)='changeActiveOptionIndex($event)' tabindex="1">
-
-</div>
+		<form [formGroup]='searchForm'>
+			<div class="search-border-left"></div>
+			<div class="search-border-right"></div>
+			<input type="text" formControlName="searchInput" class="form-control search" placeholder="Search" [(ngModel)]="search" tabindex="1" autofocus>
+		</form>
+	</div>
 
 	<div class="suggestions" *ngIf="optionsFiltered">
 		<ul>
 			<li *ngFor="let option of optionsFiltered; let i = index" tabindex="2">
-				<span  *ngIf="i < optionsLimit">
+				<span *ngIf="i < optionsLimit">
 				<a (click)="optionSelected(option)" [ngClass]="{ active: (optionIndex === i && originInput === false)}">{{ option }}</a>
 				</span>
 			</li>
 		</ul>
 	</div>
-
 </div>
