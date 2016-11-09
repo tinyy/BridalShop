@@ -1,6 +1,6 @@
 export var Countries: string[] =
     [
-        'Albania', 'Andorra', 'Armenia', 'Austria', 'Azerbaijan', 'Belarus',
+        'Albania', 'Andorra', 'Armenia', 'Austria', 'Azerbaijan', 'Argentina', 'Belarus',
         'Belgium', 'Bosnia & Herzegovina', 'Bulgaria', 'Croatia', 'Cyprus',
         'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France', 'Georgia',
         'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Italy', 'Kosovo',

@@ -1,15 +1,19 @@
 <div class="container">
-
-	<div class="input-group">
-		<input type="text" class="form-control" id="searchInput" placeholder="Search" (keyup)='searching($event)' [(ngModel)]="search" tabindex="1" autofocus>
-		
-    <div class="suggestions" *ngIf="autoCompleteOptionsFiltered">
-			<ul *ngFor="let option of autoCompleteOptionsFiltered; let i = index" tabindex="2">
-				<li *ngIf="i < 3">
-					<a (click)="autoCompleteItemSelected(option)">{{ option }}</a>
-				</li>
-			</ul>
-		</div>
+	<div class="search-container">
+		<form [formGroup]='searchForm' (ngSubmit)='searchSelected(searchForm.value)'>
+			<div class="search-border-left"></div>
+			<div class="search-border-right"></div>
+			<input type="text" formControlName="searchInput" class="form-control search" placeholder="Search" tabindex="1" autofocus>
+		</form>
 	</div>
 
+	<div class="suggestions" *ngIf="optionsFiltered">
+		<ul>
+			<li *ngFor="let option of optionsFiltered; let i = index" tabindex="2">
+				<span *ngIf="i < optionsLimit">
+				<a (click)="optionSelected(option)" [ngClass]="{ active: (optionIndex === i && originInput === false)}">{{ option }}</a>
+				</span>
+			</li>
+		</ul>
+	</div>
 </div>
