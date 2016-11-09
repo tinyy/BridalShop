@@ -1,5 +1,41 @@
-nav{
-h2 a {
-    color: red;
+@import '../../scss/_variables';
+
+.off-canvas-nav-container {
+    background: $deep-orange-400;
+    height: 100%;
+    min-height: 100%;
+    z-index: 9999;
+    min-width: 50px;
+    transition: all 0.5s;
+    /* width: 40%; This will be set in typescript */
 }
-} 
+
+.nav-arrow { padding: 5px;}
+
+/* Toggle Button */
+.display-toggle {
+    color: $deep-orange-900;
+    text-decoration: none;
+    padding: 5px;
+    display: block;
+
+    &:hover, &:focus, &:active {
+        cursor: pointer;
+    } 
+}
+
+/* Icons and Icon Rows */
+.row { margin: 0;}
+.icon-row-collapsed { display: block; 
+
+&:focus, &:hover { cursor: pointer;}
+}
+.icon-row {
+    margin-top: 1px;
+}
+.icon-row-collapsed {
+    background: $deep-orange-900;
+    color: $deep-orange-400;
+    text-align: center;
+    padding: 10px 5px;
+}

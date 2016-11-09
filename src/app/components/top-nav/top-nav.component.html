@@ -1,5 +1,56 @@
-<div class="container">
-<p>Top Nav Component</p>
-<app-searchbox [optionsLimit]="7" [options]="countries"></app-searchbox>
-</div><!-- container -->
+<div class="off-canvas-nav-container" [style.width]="containerWidth + '%'">
+	<div class="row row-nomargin">
+		<div class="text-right">
+			<a (click)='toggleNav()' class="display-toggle">
+				<i class="fa fa-arrow-right nav-arrow" aria-hidden="true" *ngIf!='navDisplayed'></i>
+				<i class="fa fa-arrow-left nav-arrow" aria-hidden="true" *ngIf='navDisplayed'></i>
+				<span *ngIf='containerWidth != containerMinDisplayWidth'>Menu</span></a>
+			<!--<button type="button" [value]='displayButtonText' (click)='toggleNav()'>{{ displayButtonText }}</button>-->
+		</div>
+	</div>
 
+	<div class="icon-row row">
+		<div class="icon-row-collapsed" *ngIf!='navDisplayed' (click)='toggleNav()'><i class="fa fa-search" aria-hidden="true"></i></div>
+		<div class="icon-row-expanded" *ngIf='navDisplayed'>
+			<app-searchbox [optionsLimit]="7" [options]="countries"></app-searchbox>
+		</div>
+	</div>
+
+    <div class="icon-row row">
+		<div class="icon-row-collapsed" *ngIf!='navDisplayed' (click)='toggleNav()'><i class="fa fa-shopping-cart" aria-hidden="true"></i></div>
+		<div class="icon-row-expanded" *ngIf='navDisplayed'>
+			Show Component
+		</div>
+	</div>
+
+    <div class="icon-row row">
+		<div class="icon-row-collapsed" *ngIf!='navDisplayed' (click)='toggleNav()'><i class="fa fa-shopping-cart" aria-hidden="true"></i></div>
+		<div class="icon-row-expanded" *ngIf='navDisplayed'>
+			Show Component
+		</div>
+	</div>
+
+    <div class="icon-row row">
+		<div class="icon-row-collapsed" *ngIf!='navDisplayed' (click)='toggleNav()'><i class="fa fa-shopping-cart" aria-hidden="true"></i></div>
+		<div class="icon-row-expanded" *ngIf='navDisplayed'>
+			Show Component
+		</div>
+	</div>
+
+    <div class="icon-row row">
+		<div class="icon-row-collapsed" *ngIf!='navDisplayed' (click)='toggleNav()'><i class="fa fa-shopping-cart" aria-hidden="true"></i></div>
+		<div class="icon-row-expanded" *ngIf='navDisplayed'>
+			Show Component
+		</div>
+	</div>
+</div>
+
+<div class="container">
+
+
+
+
+
+	<!--<app-searchbox [optionsLimit]="7" [options]="countries"></app-searchbox>-->
+</div>
+<!-- container -->

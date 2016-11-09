@@ -3,17 +3,17 @@ import { KeyboardKeys } from '../../models/enums/keyboard-keys';
 export class KeyMapper {
 
     static MapKeyBoardKey(key: KeyboardEvent): KeyboardKeys {
-        let direction: KeyboardKeys
+        let keyboardKey: KeyboardKeys
         if (key.keyCode === 40) {
-            direction = KeyboardKeys.Down;
+            keyboardKey = KeyboardKeys.Down;
         } else if (key.keyCode === 38) {
-            direction = KeyboardKeys.Up;
+            keyboardKey = KeyboardKeys.Up;
         } else if (key.keyCode === 13) {
-            direction = KeyboardKeys.Enter;
+            keyboardKey = KeyboardKeys.Enter;
         }
         else { return KeyboardKeys.KeyNotMapped; }
 
-        return direction;
+        return keyboardKey;
     }
 
 
